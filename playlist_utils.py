@@ -34,13 +34,20 @@ def get_playlist_duration(playlist_url, playback_speed=None):
     Fetches all video durations from a YouTube playlist and calculates the total duration.
     Supports playback speed adjustment.
     """
+    
+    if not playlist_url:
+        return {"error":"No playlist URL provided."}, 400
+    
+    if not ("youtube.com/playlist" in playlist_url):
+        return {"error": "Invalid playlist URL. Please provide a valid YouTube playlist URL."}, 400
+    
     # Extract the playlist ID from the URL
     try:
         playlist_id = playlist_url.split("list=")[1].split("&")[0] 
         # sometimes the playlist URL contains other parameters like "index" or "t" which are not needed for the playlist ID
         # the second split is used to remove those parameters
     except IndexError:
-        raise ValueError("Invalid playlist URL. Please provide a valid YouTube playlist URL.")
+        return {"error": "Invalid playlist URL. Please provide a valid YouTube playlist URL."}, 400
     
     
     # Fetch all videos in the playlist
@@ -54,33 +61,54 @@ def get_playlist_duration(playlist_url, playback_speed=None):
     # The loop continues until there are no more pages of results and it knows that by checking if the nextPageToken is None
     # The loop fetches the playlist items in batches of 50 and processes each batch to extract the video IDs
     # and then fetches the video details for those IDs to get the duration
-    while True:
-        playlist_items = youtube.playlistItems().list(
-            part='contentDetails',
-            playlistId=playlist_id,
-            pageToken=next_page_token,
-            maxResults=50  
-        ).execute() # execute() is a method that sends the request to the API and returns the response
-        
-        video_ids = [item['contentDetails']['videoId'] for item in playlist_items['items']] # this is a list comprehension that extracts the video IDs from the playlist items
     
-        #fetch video details for the current batch of video IDs
-        video_details = youtube.videos().list(
-            part='contentDetails',
-            id=','.join(video_ids)
-        ).execute()
+    try:
+        while True:
+            playlist_items = youtube.playlistItems().list(
+                part='contentDetails',
+                playlistId=playlist_id,
+                pageToken=next_page_token,
+                maxResults=50  
+            ).execute() # execute() is a method that sends the request to the API and returns the response
+            
+            video_ids = [item['contentDetails']['videoId'] for item in playlist_items['items']] # this is a list comprehension that extracts the video IDs from the playlist items
+
+            if not video_ids:
+                return {"error" : "No videos found in the playlist."}, 404
+            
+            #fetch video details for the current batch of video IDs
+            video_details = youtube.videos().list(
+                part='contentDetails',
+                id=','.join(video_ids)
+            ).execute()
+            
+            for video in video_details['items']:
+                duration = video['contentDetails']['duration']
+                # Parse the ISO 8601 duration format
+                duration_seconds = isodate.parse_duration(duration).total_seconds()
+                total_seconds += duration_seconds
+            
+            # Check if there are more pages of results
+            next_page_token = playlist_items.get('nextPageToken')
+            if not next_page_token:
+                break
+    
+    
+    except HttpError as e:
         
-        for video in video_details['items']:
-            duration = video['contentDetails']['duration']
-            # Parse the ISO 8601 duration format
-            duration_seconds = isodate.parse_duration(duration).total_seconds()
-            total_seconds += duration_seconds
+        error_reason = e.error_details[0]['reason'] if hasattr(e, 'error_details') else None
         
-        # Check if there are more pages of results
-        next_page_token = playlist_items.get('nextPageToken')
-        if not next_page_token:
-            break
+        if e.resp.status == 404:
+            return {"error": "Playlist not found or private."}, 404
+        elif e.resp.status == 403:
+            return {"error" : "Quota exceeded or access denied due to a private playlist."}, 403
+        else:
+            return {"error": "YouTube API error"}, 500
         
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return {"error": "Internal server error"}, 500
+    
     #Famous default playback speeds
     famous_playback_speeds = [1.0, 1.25, 1.5, 1.75, 2.0]
     final_playback_speed = []
@@ -115,9 +143,10 @@ def get_playlist_duration(playlist_url, playback_speed=None):
 
         
     return {
+        'total_seconds': total_seconds,
         'total_duration': str(datetime.timedelta(seconds=total_seconds)),
         'duration_at_different_speeds': duration_at_different_speeds
-    }
+    }, 200
 
     
    
