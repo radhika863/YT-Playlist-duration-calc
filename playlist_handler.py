@@ -23,13 +23,15 @@ def fetch_playlist_videos(api_key, playlist_id):
                 title =snippet['title']
                 thumbnail_url = snippet['thumbnails']['default']['url'] if 'thumbnails' in snippet else None
                 video_link = f"https://www.youtube.com/watch?v={video_id}"
+                channel_title = snippet.get('channelTitle', 'Unknown Channel')
                 
                 
                 videos.append({
                     'id': video_id, 
                     'title': title, 
                     'thumbnail_url': thumbnail_url,
-                    'video_link': video_link
+                    'video_link': video_link,
+                    'channel_title': channel_title
                 })
 
             next_page_token = response.get('nextPageToken')

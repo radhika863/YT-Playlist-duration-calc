@@ -63,6 +63,67 @@ def fetch_videos():
         print(f"Error in /fetch_videos: {e}")
         return jsonify({"error": "An error occurred while fetching videos"}), 500
     
+
+@app.route('/calculate_selected', methods=['POST'])
+def calculate_selected():
+    data = request.get_json()
+    video_ids = data.get('video_ids',[])
+    durations = data.get('durations',{})
+    playback_speed = data.get('playback_speed')
+    
+    if not video_ids or not durations:
+        return jsonify({"error": "Video IDs and durations are missing."}), 400
+    
+    if not isinstance(durations, dict):
+        return jsonify({"error": "Durations should be a dictionary."}), 400
+    
+    total_seconds = 0
+    for vid in video_ids:
+        total_seconds += durations.get(vid,0)
+        
+    famous_speeds = [1.0, 1.25, 1.5, 1.75, 2.0]
+    all_speeds = []
+    
+    if playback_speed and playback_speed not in famous_speeds:
+        all_speeds.append(playback_speed)
+        
+    all_speeds.extend(famous_speeds)
+    all_speeds = list(dict.fromkeys(all_speeds))  # Remove duplicates while preserving order
+    
+    duration_at_different_speeds = {}
+    for speed in all_speeds:
+        adjusted = int(total_seconds / speed)
+        h, rem = divmod(adjusted, 3600)
+        m, s = divmod(rem, 60)
+        duration_at_different_speeds[speed] = f"{h:02}:{m:02}:{s:02}"
+        
+    h, rem = divmod(int(total_seconds), 3600)
+    m, s = divmod(rem, 60)
+    formatted_duration = f"{h:02}:{m:02}:{s:02}"
+    
+    
+    return jsonify({
+        "total_seconds": total_seconds,
+        "formatted_duration": formatted_duration,
+        "duration_at_different_speeds": duration_at_different_speeds,
+    }), 200
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__=='__main__':        # this is the main entry point of the application, like the anchor of a ship
     app.run(debug=True)
     

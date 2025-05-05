@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang ="en">
 <head>
-    <metacharset="UTF-8">
+    <meta charset="UTF-8">
     <title> YouTube Playlist Duration Calculator</title>
 </head>
 <body>
@@ -9,9 +9,11 @@
     
     <form id = "fetchForm">
         <input type = "text" id="playlistUrl" placeholder="Enter YouTube Playlist URL" size = "60" required/>
+        <input id ="speed-input" type="number" step ="0.1" min = "0.1" placeholder="Enter Speed (x)" value = "1.0" required/>
         <button type ="submit">Fetch Videos</button>
     </form>
-
+    <div id="output" style="margin-top: 20px; font-weight: bold;"></div>
+    <button id="calculate-button" style="margin-top: 20px;">Calculate Selected Duration</button>
     <div id="videoTableContainer" style="margin-top: 20px;"></div>
 
     <script src = "/static/script.js"></script>
