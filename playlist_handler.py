@@ -22,16 +22,13 @@ def fetch_playlist_videos(api_key, playlist_id):
                 video_id = snippet['resourceId']['videoId']
                 title =snippet['title']
                 thumbnail_url = snippet['thumbnails']['default']['url'] if 'thumbnails' in snippet else None
-                video_link = f"https://www.youtube.com/watch?v={video_id}"
-                channel_title = snippet.get('channelTitle', 'Unknown Channel')
-                
+                video_link = f"https://www.youtube.com/watch?v={video_id}"                
                 
                 videos.append({
                     'id': video_id, 
                     'title': title, 
                     'thumbnail_url': thumbnail_url,
                     'video_link': video_link,
-                    'channel_title': channel_title
                 })
 
             next_page_token = response.get('nextPageToken')
@@ -49,7 +46,7 @@ def fetch_video_durations(api_key, video_ids):
     try:
         for i in range(0, len(video_ids), 50):
             request = youtube.videos().list(
-                part="contentDetails",
+                part="contentDetails,snippet",
                 id=','.join(video_ids[i:i+50])
             )
             response = request.execute()
@@ -57,11 +54,18 @@ def fetch_video_durations(api_key, video_ids):
             for item in response['items']:
                 video_id = item['id']
                 duration_iso = item['contentDetails']['duration']
-                duration_seconds = isodate.parse_duration(duration_iso)
-                durations[video_id] = duration_seconds.total_seconds()
+                duration_seconds = isodate.parse_duration(duration_iso).total_seconds()
+                # durations[video_id] = duration_seconds.total_seconds()
+                snippet = item.get('snippet', {})
+                channel_title = snippet.get('channelTitle', 'Unknown Channel')
+                
+                durations[video_id] = {
+                    'duration': duration_seconds,
+                    'channel_title': channel_title
+                }
     except HttpError as e:
         print(f"An error occurred: {e}")
-    
+    print("Video details fetched:", durations)
     return durations
 
 def format_duration(seconds):

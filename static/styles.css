@@ -1,0 +1,21 @@
+.table-wrapper {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #efe9e9;
+    margin-top: 10px;
+}
+
+.fixed-header-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.fixed-header-table thead th {
+    position: sticky;
+    top: 0;
+    background: rgb(246, 241, 241);
+    z-index: 2;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* adds a subtle bottom line */
+}
+

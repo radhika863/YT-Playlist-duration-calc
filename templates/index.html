@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title> YouTube Playlist Duration Calculator</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+
 </head>
 <body>
     <h1>YouTube Playlist Video Fetcher</h1>
@@ -14,8 +16,13 @@
     </form>
     <div id="output" style="margin-top: 20px; font-weight: bold;"></div>
    <!-- <button id="calculate-button" style="margin-top: 20px;">Calculate Selected Duration</button> -->
+   <div style = " margin-top: 10px;">
+    <label for="rangeInput"> Deselect range: </label>
+    <input type = "text" id="rangeInput" placeholder="e.g. 3, 4-8" style="width: 80px;" />
+    <button type="button" id = "deselect-button">Deselect</button>
+</div>
     <div id="videoTableContainer" style="margin-top: 20px;"></div>
-
+    
     <script src = "/static/script.js"></script>
 </body>
 </html>

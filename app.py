@@ -37,9 +37,12 @@ def fetch_videos():
     if not playlist_url:
         return jsonify({"error": "Playlist URL is required"}), 400
     
+    
+    
     api_key = os.getenv('YOUTUBE_API_KEY')
     if not api_key:
         return jsonify({"error": "API key is not found"}), 500
+    
     
     try:
         playlist_id = playlist_url.split('list=')[1].split('&')[0]  # Extract the playlist ID from the URL
@@ -48,16 +51,21 @@ def fetch_videos():
             return jsonify({"error": "No videos found in the playlist"}), 404
 
         video_ids = [video['id'] for video in videos] # Extract video IDs for fetching durations
+        print("video IDs:", video_ids)
         durations = fetch_video_durations(api_key, video_ids)
         
         for video in videos:
             vid = video['id']
-            seconds = durations.get(vid, 0)
+            info = durations.get(vid, {})
+            seconds = info.get('duration', 0)
             video['duration_seconds'] = seconds
             video['formatted_duration'] = format_duration(seconds)
             video['video_link'] = f"https://www.youtube.com/watch?v={vid}"
+            video['channel_title'] = info.get('channel_title', 'Unknown Channel')
         
         return jsonify({"videos": videos}), 200
+    
+    
     
     except Exception as e:
         print(f"Error in /fetch_videos: {e}")
@@ -71,8 +79,18 @@ def calculate_selected():
     durations = data.get('durations',{})
     playback_speed = data.get('playback_speed')
     
-    if not video_ids or not durations:
-        return jsonify({"error": "Video IDs and durations are missing."}), 400
+    if not video_ids:
+        return jsonify({
+        "total_seconds": 0,
+        "formatted_duration": "00:00",
+        "duration_at_different_speeds": {
+            1.0: "00:00",
+            1.25: "00:00",
+            1.5: "00:00",
+            1.75: "00:00",
+            2.0: "00:00"
+        }
+    }), 200
     
     if not isinstance(durations, dict):
         return jsonify({"error": "Durations should be a dictionary."}), 400
