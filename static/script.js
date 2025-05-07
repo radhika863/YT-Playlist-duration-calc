@@ -193,9 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 const humanDuration = parts.join(' ');
+                
+                document.getElementById('output').style.display = 'block';
+
 
                 document.getElementById('output').innerHTML = `
-                    Total playlist duration is <b> ${humanDuration} </b> at <b> ${key}x </b> speed
+                    Total playlist duration is ${humanDuration} at ${key}x speed
                 `;
 
             } else {

@@ -31,8 +31,6 @@
     margin: 0;
 }
 
-
-
 .fixed-header-table thead th {
     position: sticky;
     padding-top: 8px;
@@ -154,4 +152,67 @@ input::placeholder{
 /* Checkbox styles */
 input[type="checkbox"] {
     accent-color: black;
+}
+
+
+
+
+
+
+
+
+
+
+/* Row striping */
+.fixed-header-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover effect on rows */
+.fixed-header-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Bold headers + slightly darker background */
+.fixed-header-table thead th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Add space inside each cell */
+.fixed-header-table td, .fixed-header-table th {
+    padding: 12px;
+    font-size: 14px;
+}
+
+/* Improve output box styling */
+#output {
+    background: #fcfcfc;
+    border: 1px solid #ccc;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+main {
+    flex: 1;
 }

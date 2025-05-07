@@ -6,30 +6,55 @@
     <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-    <div style="text-align: center; margin-top: 20px; font-size: 20px; font-weight: bold;">
-        <h1>YouTube Playlist Length Calculator</h1>
-    </div>
-    
-    <form id = "fetchForm">
-        <div style = "text-align: center; ">
-            <input type = "text" id="playlistUrl" placeholder="Enter YouTube Playlist URL" size = "60" required/>
-            <input id ="speed-input" type="number" step ="any" min = "0.1" placeholder="Enter Playback Speed (x)" value = "1.0" />
-            <button type ="submit">Calculate Duration</button>
+    <main>
+        <header style="text-align: center; margin-bottom: 20px; padding: 20px 0; background-color: #fef3ec; border-bottom: 1px solid #ddd;">
+            <h1 style="margin: 0; color: #222; text-align: left; margin-left: 36px;">YouTube Playlist Length Calculator</h1>
+        </header>        
+
+        
+        
+        <form id = "fetchForm">
+            <div style = "text-align: center; ">
+                <input type = "text" id="playlistUrl" placeholder="Enter YouTube Playlist URL" size = "60" required/>
+                <input id ="speed-input" type="number" step ="any" min = "0.1" placeholder="Enter Playback Speed (x)" value = "1.0" />
+                <button type ="submit">Calculate Duration</button>
+            </div>
+        </form>
+
+
+        <div class="deselect-wrapper">
+            <input type="text" id="rangeInput" placeholder="Deselect Range (e.g. 3, 4-8)"/>
+            <button type="button" id="deselect-button">Deselect</button>
         </div>
-    </form>
 
+        <div id="output" style="margin-top: 20px; text-align: center; font-size: 18px; font-weight: bold; display: none;"></div>
 
-    <div class="deselect-wrapper">
-        <input type="text" id="rangeInput" placeholder="Deselect Range (e.g. 3, 4-8)"/>
-        <button type="button" id="deselect-button">Deselect</button>
-    </div>
-
-    <div id="output" style="margin-top: 20px; text-align: center; font-size: 18px; font-weight: bold;"></div>
+        
+    <!-- <button id="calculate-button" style="margin-top: 20px;">Calculate Selected Duration</button> -->
     
-   <!-- <button id="calculate-button" style="margin-top: 20px;">Calculate Selected Duration</button> -->
-  
-    <div id="videoTableContainer" style="margin-top: 20px;"></div>
-    
-    <script src = "/static/script.js"></script>
+        <div id="videoTableContainer" style="margin-top: 20px;"></div>
+        
+        <div style="max-width: 1200px; margin: 20px 40px 0; padding: 16px 20px; background: #fcfcfc; border: 1px solid #ccc; border-radius: 8px; color: #444;">
+            <h2 style="text-align: center; font-size: 24px; margin-top: 0;">What do we do here and how?</h2>
+            <div style="margin-bottom: 12px; font-size: 16px; ">
+                <strong>📺 Built for Binge-Watchers, Learners & Planners</strong><br/>
+                Whether you're studying or bingeing, this helps you track total watch time, precisely.
+            </div>
+            <div style="margin-bottom: 12px; font-size: 16px; ">
+                <strong>⏩ Works at Any Playback Speed</strong><br/>
+                Get total duration adjusted for 1x, 1.5x, 2x, or any custom speed you want.
+            </div>
+            <div style="font-size: 16px; ">
+                <strong>🙅‍♂️ Don’t Want to Watch It All?</strong><br/>
+                Easily skip videos by entering their numbers (e.g. 2, 4–6), no clicking necessary.
+            </div>
+        </div>
+        
+
+        <script src = "/static/script.js"></script>
+    </main>
+    <footer style="text-align: center; padding: 16px 0; font-size: 14px; color: #777; border-top: 1px solid #eee; margin-top: 40px;">
+        <p>Built with 🩸 and 😩💦 by Radhika Singhal. Buy me coffee ☕</p>
+    </footer>
 </body>
 </html>
