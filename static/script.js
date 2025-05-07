@@ -35,7 +35,18 @@ document.addEventListener('DOMContentLoaded', function () {
         await calculateDuration();  // auto calculate after render
     });
     
-
+    function formatDurationHuman(seconds) {
+        seconds = Math.floor(seconds);
+        let h = Math.floor(seconds / 3600);
+        let m = Math.floor((seconds % 3600) / 60);
+        let s = seconds % 60;
+    
+        const parts = [];
+        if (h > 0) parts.push(`${h} hour${h !== 1 ? 's' : ''}`);
+        if (m > 0) parts.push(`${m} minute${m !== 1 ? 's' : ''}`);
+        if (s > 0 || parts.length === 0) parts.push(`${s} second${s !== 1 ? 's' : ''}`);
+        return parts.join(' ');
+    }  
 
 
     function renderTable(videos){
@@ -49,24 +60,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     checked /></td>
                 <td>${i+1}</td>
                 <td><img src="${v.thumbnail_url}" alt="${v.thumbnail_url}" width="80" /></td>
-                <td>${v.title}</a><br/>
+                <td class="title-cell">${v.title}<br/>
                 <span style= "font-size: 0.8em; color: #555;">${v.channel_title}</span></td> 
                 <td>
                     <a href="${v.video_link}" target="_blank" style="text-decoration: none;" title = "Watch Video">
                     <img src="/static/Open_External.webp" alt="Open in new tab" width="20" height = "20" style="vertical-align: middle;"/>
                     </a>
                 </td>
-                <td>${v.formatted_duration}</td>
+                <td>${formatDurationHuman(v.duration_seconds)}</td>
             </tr>
         `).join('');
 
         container.innerHTML = `
             <div class="table-wrapper">
-                <table class = "fixed-header-table">
+                <table class = "fixed-header-table" >
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="select-all-checkbox" title="Select/Deselect All" checked /></th>
-                            <th>S.no</th>
+                           // <th>S.no</th>
                             <th>Video</th>
                             <th></th>
                             <th>Link</th>
@@ -79,6 +90,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 </table>
             </div>
         `;
+
+        // Add shadow to header only on scroll
+        const wrapper = container.querySelector('.table-wrapper');
+        const table = wrapper.querySelector('.fixed-header-table');
+
+        wrapper.addEventListener('scroll', function () {
+            if(wrapper.scrollTop > 0) {
+                table.classList.add('fixed-header-shadow');
+            } else {
+                table.classList.remove('fixed-header-shadow');
+            }
+        });
 
         // Select/Deselect all checkboxes
         document.getElementById('select-all-checkbox').addEventListener('change', function (e) {
@@ -172,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const humanDuration = parts.join(' ');
 
                 document.getElementById('output').innerHTML = `
-                    <b>Total playlist duration is </b> ${humanDuration} at ${key}x speed
+                    Total playlist duration is <b> ${humanDuration} </b> at <b> ${key}x </b> speed
                 `;
 
             } else {

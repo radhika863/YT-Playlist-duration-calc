@@ -2,20 +2,156 @@
     max-height: 400px;
     overflow-y: auto;
     border: 1px solid #efe9e9;
-    margin-top: 10px;
+    margin: 10px auto;
+    position: relative;
+    max-width: 1000px;
+    width: 100%;
+    border-radius: 20px;
+    padding: 0;
+}
+
+#videoTableContainer {
+    display: flex;
+    justify-content: center;
 }
 
 .fixed-header-table {
-    border-collapse: collapse;
     width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;   /* needed for rounded corners */
+    border-spacing: 0;  
 }
+
+.fixed-header-table thead tr:first-child th {
+    margin: 0;
+}
+
+.fixed-header-table tbody tr:first-child td {
+    padding-top: 8px;
+    margin: 0;
+}
+
+
 
 .fixed-header-table thead th {
     position: sticky;
+    padding-top: 8px;
+    margin: 0;
     top: 0;
-    background: rgb(246, 241, 241);
+    background: #ffffff;    
     z-index: 2;
-    text-align: left;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* adds a subtle bottom line */
+    text-align: center;
 }
 
+.fixe-header-shadow thead th {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.12); /* adds a subtle bottom line */
+}
+
+.fixed-header-table th, .fixed-header-table td {
+    padding: 8px;
+    vertical-align: middle;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fixed-header-table td.title-cell{
+    text-align: left;
+}
+
+.fixed-header-table th:nth-child(1), /* checkbox */
+.fixed-header-table  td:nth-child(1){
+    width: 40px;
+    text-align: center;
+}
+
+.fixed-header-table th:nth-child(2), /* S.no */
+.fixed-header-table  td:nth-child(2){
+    width: 50px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.fixed-header-table th:nth-child(3), /* thumbnail */
+.fixed-header-table  td:nth-child(3){
+    width: 110px;
+    text-align: center;
+}
+
+.fixed-header-table th:nth-child(4), /* title + channel*/
+.fixed-header-table  td:nth-child(4){
+    min-width: 200px;
+    max-width: 350px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fixed-header-table th:nth-child(5), /* link icon */
+.fixed-header-table  td:nth-child(5){
+    width: 50px;
+    text-align: center;
+}
+
+.fixed-header-table th:nth-child(6), /* duration */
+.fixed-header-table  td:nth-child(6){
+    width: 160px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Input field styles */
+
+input[type="text"], input[type="number"] {
+    width: 250px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    max-width: 100%;
+    margin-right: 10px;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+    border-color: #000000;
+    outline: none;
+}
+
+/* Button styles */
+button {
+    background-color: #c34421;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+    
+button:hover {
+    background-color: #b53a18;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+#fetchForm, .deselect-wrapper{
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+input::placeholder{
+    color: #aaa;
+}
+
+/* Checkbox styles */
+input[type="checkbox"] {
+    accent-color: black;
+}

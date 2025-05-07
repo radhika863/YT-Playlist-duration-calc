@@ -2,25 +2,32 @@
 <html lang ="en">
 <head>
     <meta charset="UTF-8">
-    <title> YouTube Playlist Duration Calculator</title>
+    <title> YouTube Playlist Length Calculator</title>
     <link rel="stylesheet" href="/static/styles.css" />
-
 </head>
 <body>
-    <h1>YouTube Playlist Video Fetcher</h1>
+    <div style="text-align: center; margin-top: 20px; font-size: 20px; font-weight: bold;">
+        <h1>YouTube Playlist Length Calculator</h1>
+    </div>
     
     <form id = "fetchForm">
-        <input type = "text" id="playlistUrl" placeholder="Enter YouTube Playlist URL" size = "60" required/>
-        <input id ="speed-input" type="number" step ="any" min = "0.1" placeholder="Enter Playback Speed (x)" value = "1.0" />
-        <button type ="submit">Calculate Duration</button>
+        <div style = "text-align: center; ">
+            <input type = "text" id="playlistUrl" placeholder="Enter YouTube Playlist URL" size = "60" required/>
+            <input id ="speed-input" type="number" step ="any" min = "0.1" placeholder="Enter Playback Speed (x)" value = "1.0" />
+            <button type ="submit">Calculate Duration</button>
+        </div>
     </form>
-    <div id="output" style="margin-top: 20px; font-weight: bold;"></div>
+
+
+    <div class="deselect-wrapper">
+        <input type="text" id="rangeInput" placeholder="Deselect Range (e.g. 3, 4-8)"/>
+        <button type="button" id="deselect-button">Deselect</button>
+    </div>
+
+    <div id="output" style="margin-top: 20px; text-align: center; font-size: 18px; font-weight: bold;"></div>
+    
    <!-- <button id="calculate-button" style="margin-top: 20px;">Calculate Selected Duration</button> -->
-   <div style = " margin-top: 10px;">
-    <label for="rangeInput"> Deselect range: </label>
-    <input type = "text" id="rangeInput" placeholder="e.g. 3, 4-8" style="width: 80px;" />
-    <button type="button" id = "deselect-button">Deselect</button>
-</div>
+  
     <div id="videoTableContainer" style="margin-top: 20px;"></div>
     
     <script src = "/static/script.js"></script>
