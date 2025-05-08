@@ -1,32 +1,45 @@
 # YouTube Playlist Duration Calculator
 
-A Flask-based backend API that calculates the total watch time of any YouTube playlist.
+A responsive web app that calculates the total watch time of any public YouTube playlist — even when watched at 2x speed.
+
+## Try It Live
+
+👉 [Click here to use the app](https://yt-playlist-duration-calc.onrender.com/)  
+
+## How It Works
+
+1. Paste any **YouTube playlist link** into the input field.
+2. (Optional) Enter a custom **playback speed** like `1.5x` or `2x`.
+3. The tool fetches all **public** videos in the playlist and lists them in a table.
+4. You can **deselect videos** using:
+   - Individual checkboxes
+   - A range input like `3, 5-8`
+5. It shows:
+   - **Total watch time** adjusted for speed
+   - **How many videos** are selected
+6. Works beautifully on both **desktop and mobile**.
 
 ## Features
-- Calculates total playlist watch time (hours, minutes, seconds)
-- Supports custom playback speeds (1x, 1.25x, 1.5x, 1.75x, 2x, etc)
-- Returns clean and detailed JSON responses
-- Built using Flask, Python, YouTube Data API
 
-## API Endpoint
-- `POST /calculate`
-- Body: JSON
-  ```json
-  {
-    "playlist_url": "YOUR_PLAYLIST_LINK",
-    "playback_speed": 1.5  // Optional
-  }
+- Calculates total watch time at any playback speed
+- Table with:
+  - Video titles, thumbnails, durations, and uploader info
+  - External video links
+  - Select/deselect options
+- Responsive design with mobile support
+- Gracefully skips private/unavailable videos
+- Shows total number of selected videos
 
+## Tech Stack
 
-## Sample Response
-{
-  "original_total_seconds": 7200,
-  "original_duration": "2:00:00",
-  "durations_at_speeds": {
-    "1.0x": "2:00:00",
-    "1.25x": "1:36:00",
-    "1.5x": "1:20:00",
-    "1.75x": "1:08:34",
-    "2.0x": "1:00:00"
-  }
-}
+- **Backend:** Flask (Python), YouTube Data API v3
+- **Frontend:** HTML, CSS, Vanilla JS
+- **Deployment:** Render
+
+## Why I Built This
+
+I often binge playlists for learning, but had no idea how long they'd take at faster speeds.  
+This tool helps learners, binge-watchers, and planners estimate their time investment quickly.
+
+Built with 💻 and 😤 by Radhika Singhal
+
