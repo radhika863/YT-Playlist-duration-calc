@@ -198,9 +198,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('output').style.display = 'block';
 
 
+                const totalVideos = checkboxes.length;
+                const selectedVideos = selectedVideoIds.length;
+
                 document.getElementById('output').innerHTML = `
-                    Total playlist duration is ${humanDuration} at ${key}x speed
+                    <div style="text-align: center; font-weight: normal; font-size: 18px;">
+                        Total playlist duration is <b> ${humanDuration} </b> at <b> ${key}x </b> speed
+                    </div>
+                    <div style="text-align: center; font-weight: normal; font-size: 14px; margin-top: 4px;">
+                        (Videos selected: ${selectedVideoIds.length} out of ${checkboxes.length})
+                    </div>
                 `;
+
 
             } else {
                 alert(result.error || 'Error in calculating duration');

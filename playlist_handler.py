@@ -18,18 +18,25 @@ def fetch_playlist_videos(api_key, playlist_id):
             response = request.execute()
 
             for item in response['items']:
-                snippet = item['snippet']
-                video_id = snippet['resourceId']['videoId']
-                title =snippet['title']
-                thumbnail_url = snippet['thumbnails']['default']['url'] if 'thumbnails' in snippet else None
+                snippet = item.get('snippet', {})
+                resource_id = snippet.get('resourceId', {})
+                video_id = resource_id.get('videoId')
+
+                if not video_id:
+                    # Skip private/deleted/unavailable video
+                    continue
+
+                title = snippet.get('title', 'Unknown Title')
+                thumbnail_url = snippet.get('thumbnails', {}).get('default', {}).get('url', None)
                 video_link = f"https://www.youtube.com/watch?v={video_id}"                
-                
+
                 videos.append({
                     'id': video_id, 
                     'title': title, 
                     'thumbnail_url': thumbnail_url,
                     'video_link': video_link,
                 })
+
 
             next_page_token = response.get('nextPageToken')
             if not next_page_token:
