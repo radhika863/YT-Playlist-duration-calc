@@ -1,6 +1,6 @@
 # YouTube Playlist Duration Calculator
 
-A responsive web app that calculates the total watch time of any public YouTube playlist — even when watched at 2x speed.
+A responsive web app that calculates the total watch time of YouTube playlists, watched at any custom speed.
 
 ## Try It Live
 
