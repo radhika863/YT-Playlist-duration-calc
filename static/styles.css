@@ -60,7 +60,7 @@
 
 .fixed-header-table th:nth-child(1), /* checkbox */
 .fixed-header-table  td:nth-child(1){
-    width: 40px;
+    width: 50px;
     text-align: center;
 }
 
@@ -255,6 +255,12 @@ main {
         min-width: 600px;
     }
 
+    .table-wrapper {
+        overflow-x: auto;
+        overflow-y: visible; /* optional: so we don't restrict vertical growth */
+        width: 100%;
+    }    
+
     .fixed-header-table th, 
     .fixed-header-table td {
         font-size: 13px;
@@ -270,5 +276,32 @@ main {
     footer{
         font-size: 13px;
         padding: 10px;
+    }
+}
+
+
+/* ✅ Global fix for scroll visibility */
+.table-wrapper {
+    overflow-x: auto;
+    overflow-y: visible;
+    width: 100%;
+    padding-left: 10px;  /* Reveal checkboxes */
+    box-sizing: border-box;
+}
+
+.fixed-header-table {
+    margin-left: 0;
+    text-align: left;
+    min-width: 600px;
+}
+
+/* ✅ Mobile-specific polish */
+@media (max-width: 768px) {
+    .table-wrapper {
+        padding-left: 10px;
+    }
+
+    .fixed-header-table thead th {
+        position: static;
     }
 }
