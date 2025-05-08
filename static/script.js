@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('fetchForm').addEventListener('submit', async function (e){
         e.preventDefault();
     
-        const url = document.getElementById('playlistUrl').value;
+        const url = document.getElementById('playlistUrl').value.trim().replace(/\+/g, '');
+
     
         const speed = document.getElementById('speed-input').value.trim();
         if (!isValidSpeedInput(speed)) {

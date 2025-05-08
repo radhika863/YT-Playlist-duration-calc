@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 import os
 from dotenv import load_dotenv
-from playlist_utils import get_playlist_duration
+from playlist_utils import get_playlist_duration, clean_playlist_id
 from playlist_handler import fetch_playlist_videos, fetch_video_durations, format_duration
 from flask import render_template
+
 
 load_dotenv()  # Load environment variables from .env file
 app = Flask(__name__)
@@ -45,7 +46,10 @@ def fetch_videos():
     
     
     try:
-        playlist_id = playlist_url.split('list=')[1].split('&')[0]  # Extract the playlist ID from the URL
+        playlist_id = clean_playlist_id(playlist_url)
+        if not playlist_id:
+            return jsonify({"error": "Invalid YouTube playlist URL"}), 400
+  # Extract the playlist ID from the URL
         videos = fetch_playlist_videos(api_key, playlist_id) # it's data type is list of dicts
         if not videos:
             return jsonify({"error": "No videos found in the playlist"}), 404
