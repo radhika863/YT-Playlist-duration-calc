@@ -216,3 +216,59 @@ body {
 main {
     flex: 1;
 }
+
+
+/* Responsiveness */
+
+@media (max-width: 768px) {
+    #fetchForm{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #fetchForm input[type="text"],
+    #fetchForm input[type="number"] ,
+    #fetchForm button {
+        width: 80%;
+        margin: 6px 0;
+    }
+
+    .deselect-wrapper{
+        flex-direction: column;
+        align-items: stretch;
+        align-content: center;
+    }
+
+    .deselect-wrapper input,
+    .deselect-wrapper button {
+        width: 80%;
+        margin: 6px 0;
+    }
+
+    #videoTableContainer {
+        overflow-x: auto;
+        padding: 0 10px;
+    }
+
+    .table-wrapper{
+        width: max-content;
+        min-width: 600px;
+    }
+
+    .fixed-header-table th, 
+    .fixed-header-table td {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    #output {
+        font-size: 16px;
+        width: 80%;
+        padding: 10px;
+    }
+
+    footer{
+        font-size: 13px;
+        padding: 10px;
+    }
+}

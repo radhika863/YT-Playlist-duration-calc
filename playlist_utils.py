@@ -23,18 +23,36 @@ if not API_KEY:
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
 
+def clean_playlist_id(playlist_url):
+    if not playlist_url:
+        return None
+    playlist_url = playlist_url.strip()
+    
+    if "list=" in playlist_url:
+        playlist_id = playlist_url.split("list=")[1].split("&")[0]
+    else:
+        playlist_id = playlist_url
+
+    # Critical clean step
+    playlist_id = playlist_id.strip().replace(' ', '').replace('+', '')
+
+    return playlist_id
+
+
 # Function to fetch all video durations from a YouTube playlist and calculate the total duration
 # This function takes a playlist URL and an optional playback speed as input which is set to None by default as the user may not provide it
 # and returns a dictionary containing the total duration in seconds, a human-readable format, and the duration at different playback speeds
 # The function uses the YouTube Data API to fetch the playlist items and their details, including the video IDs and durations
 # and uses the datetime library to format the total duration in a human-readable format
 
+# for extra space in the input field, remove the spaces and plus signs from the playlist ID
+
 def get_playlist_duration(playlist_url, playback_speed=None):
     """
     Fetches all video durations from a YouTube playlist and calculates the total duration.
     Supports playback speed adjustment.
     """
-    
+     
     if not playlist_url:
         return {"error":"No playlist URL provided."}, 400
     
@@ -42,12 +60,13 @@ def get_playlist_duration(playlist_url, playback_speed=None):
         return {"error": "Invalid playlist URL. Please provide a valid YouTube playlist URL."}, 400
     
     # Extract the playlist ID from the URL
-    try:
-        playlist_id = playlist_url.split("list=")[1].split("&")[0] 
-        # sometimes the playlist URL contains other parameters like "index" or "t" which are not needed for the playlist ID
-        # the second split is used to remove those parameters
-    except IndexError:
-        return {"error": "Invalid playlist URL. Please provide a valid YouTube playlist URL."}, 400
+    playlist_id = clean_playlist_id(playlist_url)
+
+    if not playlist_id:
+        return {"error": "Invalid YouTube playlist URL"}, 400
+
+    print(f"🧪 Using cleaned playlist_id: '{playlist_id}'")
+
     
     
     # Fetch all videos in the playlist
@@ -61,7 +80,8 @@ def get_playlist_duration(playlist_url, playback_speed=None):
     # The loop continues until there are no more pages of results and it knows that by checking if the nextPageToken is None
     # The loop fetches the playlist items in batches of 50 and processes each batch to extract the video IDs
     # and then fetches the video details for those IDs to get the duration
-    
+    print(f"▶️ Final playlistId sent to YouTube: '{playlist_id}'")
+
     try:
         while True:
             playlist_items = youtube.playlistItems().list(
@@ -70,7 +90,8 @@ def get_playlist_duration(playlist_url, playback_speed=None):
                 pageToken=next_page_token,
                 maxResults=50  
             ).execute() # execute() is a method that sends the request to the API and returns the response
-            
+            print(f"📦 YouTube API response: {playlist_items}")
+
             video_ids = [item['contentDetails']['videoId'] for item in playlist_items['items']] # this is a list comprehension that extracts the video IDs from the playlist items
 
             if not video_ids:
@@ -140,6 +161,9 @@ def get_playlist_duration(playlist_url, playback_speed=None):
         formatted_duration = f"{hours}:{minutes:02}:{seconds:02}"
 
         duration_at_different_speeds[speed] = formatted_duration
+
+    
+    
 
         
     return {
